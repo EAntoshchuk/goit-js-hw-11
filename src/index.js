@@ -12,7 +12,7 @@ const loadMoreBtn = document.querySelector('.load-more');
 let perPage = 40;
 let page = 1;
 let request = inputEL.value;
-let totalPages;
+let totalPages = null;
 let bottomReached = false;
 
 searchBtn.addEventListener('click', onSearchImg);
@@ -29,17 +29,16 @@ async function onSearchImg(event) {
   }
 
   fetchImages(request, page, perPage)
-    .then(request => {
-      totalPages = Math.round(request.totalHits / perPage);
+    .then(res => {
+      totalPages = Math.round(res.totalHits / perPage);
       console.log(totalPages);
-      if (request.hits.length > 0) {
-        Notiflix.Notify.success(
-          `Hooray! We found ${request.totalHits} images.`
-        );
-        renderGallery(request);
+      console.log(res);
+      if (res.hits.length > 0) {
+        Notiflix.Notify.success(`Hooray! We found ${res.totalHits} images.`);
+        renderGallery(res);
         gallery.refresh();
         if (page < totalPages) {
-          showLoadBtn();
+          loadMoreBtnToggle();
         } else {
           Notiflix.Notify.info(
             "We're sorry, but you've reached the end of search results."
@@ -87,26 +86,24 @@ function renderGallery(image) {
 let gallery = new SimpleLightbox('.gallery a', {
   captionsData: 'alt',
   captionDelay: 250,
+  animationSpeed: 150,
 });
 
-function loadMoreBtnTogle() {
+function loadMoreBtnToggle() {
   loadMoreBtn.classList.toggle('visually-hidden');
 }
 
-loadMoreBtn.addEventListener('click', loadMoreImages);
-
-const loadMoreImages = async () => {
+function loadMoreImages() {
   fetchImages.page += 1;
+  let totalPages = Math.round(request.totalHits / perPage);
 
-  try {
-    const { data } = await fetchImages();
+  fetchImages(request).then(image => {
+    galleryEL.insertAdjacentHTML('beforeend', renderGallery(image.hits));
 
-    if (fetchImages.page === data.total_pages) {
+    if (fetchImages.page === totalPages) {
       loadMoreBtn.classList.add('visually-hidden');
     }
+  });
+}
 
-    galleryEL.insertAdjacentHTML('beforeend', renderGallery(data.results));
-  } catch (err) {
-    console.log(err);
-  }
-};
+loadMoreBtn.addEventListener('click', loadMoreImages);
