@@ -6,9 +6,10 @@
   display: flex;
   flex-direction: row;
   width: 100%;
-  height: 40px;
+  height: 60px;
   justify-content: center;
   align-items: center;
+  margin-bottom: 20px;
   background: #5f6380;
 }
 
@@ -18,23 +19,22 @@
   align-items: center;
   font: inherit;
   width: 50vw;
-  border-radius: 10px;
   align-items: center;
 }
 
 .search-form input {
-  border-radius: 10px;
+  border-radius: 20px;
   width: 100%;
-  height: 30px;
+  height: 45px;
   margin-right: 10px;
-  padding: 10px;
+  padding: 15px;
   border: 1px solid #1d1e1ca1;
 }
 
 .search-form ::placeholder {
   color: #4285f4;
-  font-size: 14px;
-  /* font-weight: bold; */
+  font-size: 16px;
+  font-weight: bold;
 }
 
 .btn {
@@ -45,23 +45,33 @@
   font-weight: bold;
   border-radius: 10px;
   cursor: pointer;
+  color: #4285f4;
 }
 
 .btn-search {
   width: 50%;
-  height: 30px;
+  height: 45px;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   cursor: pointer;
   padding-left: 20px;
   padding-right: 20px;
   border: 1px solid #1d1e1ca1;
+  border-radius: 20px;
   background-color: white;
   transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1),
     box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .load-more {
-  display: block;
+  width: 50%;
+  height: 45px;
+  cursor: pointer;
+  padding-left: 20px;
+  padding-right: 20px;
+  border: 1px solid #1d1e1ca1;
+  border-radius: 20px;
+  background-color: white;
+  margin: 0 auto;
 }
 
 .visually-hidden {
@@ -75,4 +85,63 @@
   clip-path: inset(100%);
   clip: rect(0 0 0 0);
   overflow: hidden;
+}
+
+.section {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.gallery a {
+  display: block;
+  width: 100%;
+}
+.image-card {
+  position: relative;
+  display: flex;
+  flex-basis: calc((100% - 60px) / 4);
+}
+
+.gallery-image {
+  height: 80%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.image-thumb {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: 20%;
+  justify-content: center;
+}
+
+.image-info {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 0 auto;
+  display: block;
+  text-align: center;
+  color: #2076b5;
+  text-decoration: none;
+  border-right: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  border-left: 1px solid #eee;
 }

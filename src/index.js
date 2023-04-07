@@ -10,15 +10,14 @@ const galleryEL = document.querySelector('.gallery');
 const loadMoreBtn = document.querySelector('.load-more');
 
 let perPage = 40;
-let page = 0;
-// let request = inputEL.value;
+let page = 1;
+let request = inputEL.value;
 let totalPages;
 let bottomReached = false;
 
-searchBtn.addEventListener('click', onSearch);
-// loadMoreBtn.addEventListener('click', onLoadMoreImages);
+searchBtn.addEventListener('click', onSearchImg);
 
-async function onSearch(event) {
+async function onSearchImg(event) {
   event.preventDefault();
   galleryEL.innerHTML = '';
   const request = inputEL.value.trim();
@@ -69,17 +68,17 @@ function renderGallery(image) {
         downloads,
       } = attribute;
 
-      return `<a href="${largeImageURL}" >
-  <div class="photo-card">
-  <img src="${webformatURL}" alt="${tags}" loading="lazy" />
-  <div class="info">
-  <p class="info-item"><b>Likes</b> ${likes}</p>
-  <p class="info-item"><b>Views</b> ${views}</p>
-  <p class="info-item"><b>Comments</b> ${comments}</p>
-  <p class="info-item"><b>Downloads</b> ${downloads}</p>
+      return `<div class="image-card">
+      <a href="${largeImageURL}">
+  <img class="gallery-image" src="${webformatURL}" alt="${tags}" loading="lazy" />
+  </a>
+  <div class="image-thumb">
+  <p class="image-info"><b>Views:</b> ${views}</p>
+  <p class="image-info"><b>Comments:</b> ${comments}</p>
+  <p class="image-info"><b>Downloads:</b> ${downloads}</p>
+  <p class="image-info"><b>Likes:</b> ${likes}</p>
   </div>
-  </div>
-  </a>`;
+  </div>`;
     })
     .join('');
   galleryEL.insertAdjacentHTML('afterbegin', markup);
@@ -89,3 +88,25 @@ let gallery = new SimpleLightbox('.gallery a', {
   captionsData: 'alt',
   captionDelay: 250,
 });
+
+function loadMoreBtnTogle() {
+  loadMoreBtn.classList.toggle('visually-hidden');
+}
+
+loadMoreBtn.addEventListener('click', loadMoreImages);
+
+const loadMoreImages = async () => {
+  fetchImages.page += 1;
+
+  try {
+    const { data } = await fetchImages();
+
+    if (fetchImages.page === data.total_pages) {
+      loadMoreBtn.classList.add('visually-hidden');
+    }
+
+    galleryEL.insertAdjacentHTML('beforeend', renderGallery(data.results));
+  } catch (err) {
+    console.log(err);
+  }
+};
