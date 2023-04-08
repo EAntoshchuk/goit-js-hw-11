@@ -68,10 +68,10 @@
   cursor: pointer;
   padding-left: 20px;
   padding-right: 20px;
-  border: 1px solid #1d1e1ca1;
+  border: 2px solid #1d1e1ca1;
   border-radius: 20px;
   background-color: white;
-  margin: 0 auto;
+  margin: 15px auto;
 }
 
 .visually-hidden {
@@ -116,6 +116,12 @@
   width: 100%;
   object-fit: cover;
   border-radius: 8px;
+  transition: transform cubic-bezier(0.4, 0, 0.2, 1);
+  animation-duration: 250ms;
+}
+
+.gallery-image:hover {
+  transform: scale(1.05);
 }
 
 .image-thumb {

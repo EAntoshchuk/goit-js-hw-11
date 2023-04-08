@@ -13,7 +13,6 @@ let perPage = 40;
 let page = 1;
 let request = inputEL.value;
 let totalPages = null;
-let bottomReached = false;
 
 searchBtn.addEventListener('click', onSearchImg);
 
@@ -22,7 +21,6 @@ async function onSearchImg(event) {
   galleryEL.innerHTML = '';
   const request = inputEL.value.trim();
   page = 1;
-  bottomReached = false;
   if (request === '') {
     Notiflix.Notify.failure('Enter search request please');
     return;
@@ -30,7 +28,7 @@ async function onSearchImg(event) {
 
   fetchImages(request, page, perPage)
     .then(res => {
-      totalPages = Math.round(res.totalHits / perPage);
+      totalPages = Math.ceil(res.totalHits / perPage);
       console.log(totalPages);
       console.log(res);
       if (res.hits.length > 0) {
@@ -80,7 +78,7 @@ function renderGallery(image) {
   </div>`;
     })
     .join('');
-  galleryEL.insertAdjacentHTML('afterbegin', markup);
+  galleryEL.insertAdjacentHTML('beforeend', markup);
 }
 
 let gallery = new SimpleLightbox('.gallery a', {
@@ -94,14 +92,16 @@ function loadMoreBtnToggle() {
 }
 
 function loadMoreImages() {
-  fetchImages.page += 1;
-  let totalPages = Math.round(request.totalHits / perPage);
+  request = inputEL.value;
+  page += 1;
 
-  fetchImages(request).then(image => {
-    galleryEL.insertAdjacentHTML('beforeend', renderGallery(image.hits));
+  fetchImages.totalPages = Math.ceil(request.totalHits / perPage);
 
-    if (fetchImages.page === totalPages) {
-      loadMoreBtn.classList.add('visually-hidden');
+  fetchImages(request, page, perPage).then(request => {
+    renderGallery(request);
+    gallery.refresh();
+    if (page === totalPages) {
+      loadMoreBtnToggle();
     }
   });
 }
